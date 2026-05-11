@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useBank } from '../../context/BankContext';
 import { formatCurrency, formatDate } from '../../utils/format';
-import { Search, Filter, ArrowDownLeft, ArrowUpRight } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 export default function ManageTransactions() {
   const { transactions, users } = useBank();
