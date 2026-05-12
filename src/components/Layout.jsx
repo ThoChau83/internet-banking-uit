@@ -156,16 +156,18 @@ export default function Layout() {
                     key={link.path}
                     to={link.path}
                     onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center px-3 py-3 rounded-xl transition-all duration-200 group ${isActive
+                    className={`flex items-center px-3 py-3 rounded-xl transition-all duration-200 group ${
+                      isActive
                         ? "bg-primary-50 text-primary-700 font-medium"
                         : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                      }`}
+                    }`}
                   >
                     <Icon
-                      className={`mr-3 h-5 w-5 flex-shrink-0 transition-colors ${isActive
+                      className={`mr-3 h-5 w-5 flex-shrink-0 transition-colors ${
+                        isActive
                           ? "text-primary-600"
                           : "text-slate-400 group-hover:text-slate-600"
-                        }`}
+                      }`}
                     />
                     {link.name}
                   </Link>
@@ -323,7 +325,8 @@ export default function Layout() {
                 Phiên đăng nhập hết hạn
               </h3>
               <p className="text-slate-600 mb-8 leading-relaxed">
-                Bạn đã không có bất kỳ thao tác nào trong 5 phút. Để đảm bảo an toàn, hệ thống đã tạm ngưng phiên làm việc của bạn.
+                Bạn đã không có bất kỳ thao tác nào trong 5 phút. Để đảm bảo an
+                toàn, hệ thống đã tạm ngưng phiên làm việc của bạn.
               </p>
               <button
                 onClick={handleConfirmLogout}

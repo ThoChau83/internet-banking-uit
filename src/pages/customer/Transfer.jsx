@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useBank } from '../../context/BankContext';
 import { formatCurrency } from '../../utils/format';
-import { ArrowRight, KeyRound, Loader2, CheckCircle2, Banknote, Building2 } from 'lucide-react';
+import { ArrowRight, KeyRound, Loader2, CheckCircle2, Banknote, Building2, AlertTriangle, X } from 'lucide-react';
 
 export default function Transfer() {
-  const { user, makeTransaction } = useBank();
+  const { user, users, makeTransaction, transactions } = useBank();
   
   const [step, setStep] = useState(1); // 1: Form, 2: OTP, 3: Success
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // Modal state
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   
   // Form state
   const [bank, setBank] = useState('vibe');
@@ -16,6 +20,22 @@ export default function Transfer() {
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
   const [otp, setOtp] = useState('');
+  const [recipientName, setRecipientName] = useState('');
+
+  useEffect(() => {
+    if (bank === 'vibe' && accountNumber.length > 0) {
+      const recipient = users.find(u => u.accountNumber === accountNumber && u.id !== user.id);
+      if (recipient) {
+        setRecipientName(recipient.name);
+      } else {
+        setRecipientName('');
+      }
+    } else {
+      setRecipientName('');
+    }
+  }, [accountNumber, bank, users, user.id]);
+
+  const isRecipientValid = bank !== 'vibe' || (bank === 'vibe' && recipientName !== '');
 
   const handleTransferSubmit = (e) => {
     e.preventDefault();
@@ -24,8 +44,22 @@ export default function Transfer() {
       return;
     }
     
-    if (Number(amount) > user.balance) {
-      setError('Số dư không đủ để thực hiện giao dịch');
+    const numAmount = Number(amount);
+    
+    if (numAmount > user.balance) {
+      setErrorMessage('Số dư không đủ để thực hiện giao dịch. Vui lòng kiểm tra lại số dư khả dụng.');
+      setShowErrorModal(true);
+      return;
+    }
+
+    const today = new Date().toDateString();
+    const todayTransfers = transactions
+      .filter(t => t.userId === user.id && t.type === 'send' && t.status === 'success' && new Date(t.date).toDateString() === today)
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    if (todayTransfers + numAmount > 100000000) {
+      setErrorMessage(`Giao dịch vượt quá hạn mức. Bạn chỉ có thể chuyển tối đa 100,000,000 VND/ngày. (Đã chuyển trong ngày: ${formatCurrency(todayTransfers)})`);
+      setShowErrorModal(true);
       return;
     }
     
@@ -137,6 +171,12 @@ export default function Transfer() {
                     className="block w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-slate-50 focus:bg-white transition-colors"
                     placeholder="Nhập số tài khoản"
                   />
+                  {bank === 'vibe' && accountNumber.length > 0 && !recipientName && (
+                    <p className="text-red-500 text-xs mt-2 flex items-center gap-1"><X className="h-3 w-3"/> Không tìm thấy tài khoản hợp lệ</p>
+                  )}
+                  {bank === 'vibe' && recipientName && (
+                    <p className="text-emerald-600 text-xs mt-2 flex items-center gap-1"><CheckCircle2 className="h-3 w-3"/> Người nhận: <strong>{recipientName}</strong></p>
+                  )}
                 </div>
               </div>
 
@@ -147,9 +187,10 @@ export default function Transfer() {
                   <input
                     type="number"
                     required
+                    disabled={!isRecipientValid}
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="block w-full pl-10 pr-12 py-3 border border-slate-200 rounded-xl focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-slate-50 focus:bg-white transition-colors text-lg font-bold"
+                    className="block w-full pl-10 pr-12 py-3 border border-slate-200 rounded-xl focus:ring-primary-500 focus:border-primary-500 sm:text-sm bg-slate-50 focus:bg-white transition-colors text-lg font-bold disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed"
                     placeholder="0"
                   />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -265,6 +306,27 @@ export default function Transfer() {
 
         </div>
       </div>
+
+      {/* Error Modal */}
+      {showErrorModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle className="h-8 w-8 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">Giao dịch không hợp lệ</h3>
+              <p className="text-slate-600 mb-6">{errorMessage}</p>
+              <button
+                onClick={() => setShowErrorModal(false)}
+                className="w-full py-3 px-4 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-colors"
+              >
+                Đã hiểu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
