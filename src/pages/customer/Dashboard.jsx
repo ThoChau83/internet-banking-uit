@@ -8,7 +8,8 @@ import {
   ArrowRight,
   Wallet,
   ShieldCheck,
-  MoreHorizontal
+  MoreHorizontal,
+  History
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

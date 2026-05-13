@@ -28,6 +28,17 @@ export const USERS = [
     cardNumber: "4584 **** **** 5678",
     cardStatus: "locked",
   },
+  {
+    id: 4,
+    username: "khachhang3",
+    password: "123",
+    role: "customer",
+    name: "Trần Thị BC",
+    accountNumber: "1234567891",
+    balance: 15000000,
+    cardNumber: "1234 **** **** 5678",
+    cardStatus: "active",
+  },
 ];
 
 export const TRANSACTIONS = [
