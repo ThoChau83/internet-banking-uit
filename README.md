@@ -1,4 +1,4 @@
-# 🏦 Internet Banking UIT
+# 🏦 Giao diện Internet Banking UIT
 
 Ứng dụng **Internet Banking** được xây dựng bằng React, phục vụ môn học **IE108 - Phân Tích Thiết Kế Phần Mềm** tại Trường Đại học Công nghệ Thông tin (UIT).
 
