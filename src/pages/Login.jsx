@@ -206,6 +206,59 @@ export default function Login() {
 
 
         </div>
+
+        {/* Demo Accounts */}
+        {step === 1 && (
+          <div className="mt-6 bg-white/80 border border-slate-200 rounded-2xl p-5 shadow-sm backdrop-blur-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tài khoản Demo</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => { setUsername('admin'); setPassword('123'); setError(''); }}
+                className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-slate-200 hover:border-primary-400 hover:bg-primary-50 transition-all group"
+              >
+                <ShieldCheck className="h-5 w-5 text-slate-400 group-hover:text-primary-600 transition-colors" />
+                <span className="text-xs font-medium text-slate-700 group-hover:text-primary-700">Quản trị viên</span>
+                <span className="text-[10px] text-slate-400">admin / 123</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setUsername('khachhang'); setPassword('123'); setError(''); }}
+                className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-slate-200 hover:border-primary-400 hover:bg-primary-50 transition-all group"
+              >
+                <User className="h-5 w-5 text-slate-400 group-hover:text-primary-600 transition-colors" />
+                <span className="text-xs font-medium text-slate-700 group-hover:text-primary-700">Nguyễn Văn A</span>
+                <span className="text-[10px] text-slate-400">khachhang / 123</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setUsername('khachhang2'); setPassword('123'); setError(''); }}
+                className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-red-200 bg-red-50/50 hover:border-red-400 hover:bg-red-50 transition-all group"
+              >
+                <Lock className="h-5 w-5 text-red-400 group-hover:text-red-600 transition-colors" />
+                <span className="text-xs font-medium text-red-600 group-hover:text-red-700">Trần Thị B</span>
+                <span className="text-[10px] text-red-400">khachhang2 / 123</span>
+                <span className="text-[9px] text-red-500 font-medium">🔒 Bị khóa</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setUsername('khachhang3'); setPassword('123'); setError(''); }}
+                className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-slate-200 hover:border-primary-400 hover:bg-primary-50 transition-all group"
+              >
+                <User className="h-5 w-5 text-slate-400 group-hover:text-primary-600 transition-colors" />
+                <span className="text-xs font-medium text-slate-700 group-hover:text-primary-700">Trần Thị BC</span>
+                <span className="text-[10px] text-slate-400">khachhang3 / 123</span>
+              </button>
+            </div>
+            <p className="mt-3 text-[11px] text-slate-400 text-center">
+              Mã OTP: <span className="font-mono font-semibold text-slate-600">123456</span>
+            </p>
+          </div>
+        )}
+
       </div>
     </div>
   )
